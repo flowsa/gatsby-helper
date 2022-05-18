@@ -158,6 +158,13 @@ class Plugin extends \craft\base\Plugin
                 /** @var Element $element */
                 $element = $event->sender;
 
+                if (getenv("CRAFT_GATSBY_HELPER_EXCLUDE")) {
+                    $arr = explode(",", getenv("CRAFT_GATSBY_HELPER_EXCLUDE"));
+                    if (in_array($element->handle, $arr, true)) {
+                        return;
+                    }
+                }
+
                 $this->getDeltas()->registerDeletedElement($element);
 
                 /** @var Element $element */
@@ -184,6 +191,13 @@ class Plugin extends \craft\base\Plugin
                 // If the element or it's root element is a draft, don't trigger a build.
                 if ($rootElement->getIsDraft() || $rootElement->getIsRevision()) {
                     return;
+                }
+
+                if (getenv("CRAFT_GATSBY_HELPER_EXCLUDE")) {
+                    $arr = explode(",", getenv("CRAFT_GATSBY_HELPER_EXCLUDE"));
+                    if (in_array($element->handle, $arr, true)) {
+                        return;
+                    }
                 }
 
                 $this->getBuilds()->triggerBuild();
