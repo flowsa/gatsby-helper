@@ -160,7 +160,7 @@ class Plugin extends \craft\base\Plugin
 
                 if (getenv("CRAFT_GATSBY_HELPER_EXCLUDE")) {
                     $arr = explode(",", getenv("CRAFT_GATSBY_HELPER_EXCLUDE"));
-                    if (in_array($element->handle, $arr, true)) {
+                    if (in_array($element->section->handle, $arr, true)) {
                         return;
                     }
                 }
@@ -184,7 +184,7 @@ class Plugin extends \craft\base\Plugin
             Element::class,
             Element::EVENT_AFTER_SAVE,
             function(Event $event) {
-                /** @var Element $element */
+                /** @var Entry $element */
                 $element = $event->sender;
                 $rootElement = ElementHelper::rootElement($element);
 
@@ -195,7 +195,7 @@ class Plugin extends \craft\base\Plugin
 
                 if (getenv("CRAFT_GATSBY_HELPER_EXCLUDE")) {
                     $arr = explode(",", getenv("CRAFT_GATSBY_HELPER_EXCLUDE"));
-                    if (in_array($element->handle, $arr, true)) {
+                    if (in_array($element->section->handle, $arr, true)) {
                         return;
                     }
                 }
