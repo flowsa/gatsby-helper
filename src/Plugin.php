@@ -160,7 +160,7 @@ class Plugin extends \craft\base\Plugin
 
                 if (getenv("CRAFT_GATSBY_HELPER_EXCLUDE")) {
                     $arr = explode(",", getenv("CRAFT_GATSBY_HELPER_EXCLUDE"));
-                    if (in_array($element->section->handle, $arr, true)) {
+                    if (isset($element->section) && in_array($element->section->handle, $arr, true)) {
                         return;
                     }
                 }
@@ -195,7 +195,7 @@ class Plugin extends \craft\base\Plugin
 
                 if (getenv("CRAFT_GATSBY_HELPER_EXCLUDE")) {
                     $arr = explode(",", getenv("CRAFT_GATSBY_HELPER_EXCLUDE"));
-                    if (in_array($element->section->handle, $arr, true)) {
+                    if (isset($element->section) && in_array($element->section->handle, $arr, true)) {
                         return;
                     }
                 }
