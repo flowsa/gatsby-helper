@@ -44,22 +44,27 @@ class Builds extends Component
         if (!empty($buildWebhookUrl) && $this->_buildQueued === false) {
             $this->_buildQueued = true;
             Craft::$app->on(Application::EVENT_AFTER_REQUEST, function() use ($buildWebhookUrl) {
-                // $guzzle = Craft::createGuzzleClient([
-                //     'headers' => [
-                //         'x-preview-update-source' => 'Craft CMS',
-                //         'Content-type' => 'application/json'
-                //     ]
-                // ]);
-                // $guzzle->request('POST', $buildWebhookUrl);
 
-                $webHook = "https://webhook.gatsbyjs.com/hooks/builds/trigger/" . getenv("GATSBY_CLOUD_SITE_ID");
-                $guzzle = Craft::createGuzzleClient([
-                    'headers' => [
-                        'x-preview-update-source' => 'Craft CMS',
-                        'x-gatsby-cache' => 'false',
-                        'Content-type' => 'application/json'
-                    ]
-                ]);
+                if (getenv("NETLIFY_BUILD_HOOK")) {
+                    $webHook = "https://api.netlify.com/build_hooks/".getenv("NETLIFY_BUILD_HOOK")."&clear_cache=true";
+                    $guzzle = Craft::createGuzzleClient([
+                        'headers' => [
+                            // 'x-preview-update-source' => 'Craft CMS',
+                            // 'x-gatsby-cache' => 'false',
+                            'Content-type' => 'application/json'
+                        ]
+                    ]);
+                } else {
+                    $webHook = "https://webhook.gatsbyjs.com/hooks/builds/trigger/" . getenv("GATSBY_CLOUD_SITE_ID");
+                    $guzzle = Craft::createGuzzleClient([
+                        'headers' => [
+                            'x-preview-update-source' => 'Craft CMS',
+                            'x-gatsby-cache' => 'false',
+                            'Content-type' => 'application/json'
+                        ]
+                    ]);
+                }
+
                 $guzzle->request('POST', $webHook);
 
             }, null, false);
