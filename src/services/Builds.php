@@ -46,7 +46,7 @@ class Builds extends Component
             Craft::$app->on(Application::EVENT_AFTER_REQUEST, function() use ($buildWebhookUrl) {
 
                 if (getenv("NETLIFY_BUILD_HOOK")) {
-                    $webHook = "https://api.netlify.com/build_hooks/".getenv("NETLIFY_BUILD_HOOK")."&clear_cache=true";
+                    $webHook = "https://api.netlify.com/build_hooks/".getenv("NETLIFY_BUILD_HOOK")."?clear_cache=true";
                     $guzzle = Craft::createGuzzleClient([
                         'headers' => [
                             // 'x-preview-update-source' => 'Craft CMS',
